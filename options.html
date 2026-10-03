@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chime In &middot; Settings</title><link rel="stylesheet" href="options.css"></head>
+<body><main><div class="eyebrow">YOUR ANTI-LURKING SIDEKICK</div><h1><img src="assets/icon-128.png" alt="">Chime In</h1><p class="intro">Less lurking. More chiming in.</p>
+<p class="hint">Three reply ideas. Four personalities. One less lurker.</p>
+<form id="settings">
+<label for="apiKey">Gemini API key</label><input id="apiKey" type="password" autocomplete="off" placeholder="Paste your API key" required>
+<p class="hint">Create a key in <a href="https://aistudio.google.com/apikey" target="_blank" rel="noreferrer">Google AI Studio</a>. Your key stays in this browser profile and is sent only to Google's API. This personal prototype stores it locally; it isn't encrypted.</p>
+<label for="mode">Reply personality</label>
+<select id="mode" name="mode" aria-describedby="modeDescription"></select>
+<p class="hint" id="modeDescription"></p>
+<p class="hint" id="historyNote" hidden>Absurd connections, real history. Uses a small fact bank from <a href="https://www.metmuseum.org/essays/byzantium-ca-330-1453" target="_blank" rel="noreferrer">The Met</a> and the <a href="https://guides.loc.gov/byzantine-empire/introduction" target="_blank" rel="noreferrer">Library of Congress</a>. Check historical claims before posting.</p>
+<label for="tone">Extra style preferences</label><textarea id="tone" rows="3" maxlength="300"></textarea>
+<label for="dailyLimit">Daily request limit</label><input id="dailyLimit" type="number" min="1" max="500" required>
+<p class="hint">100 requests is roughly $0.032 with 2,000 input and 300 output tokens each. Actual cost varies with post length. Limits reset at midnight UTC and count failed requests too.</p>
+<label class="check"><input id="enabled" type="checkbox"> Suggest automatically on Reddit comment pages</label>
+<p class="privacy">When enabled, opening a thread sends its visible post title, text and subreddit to Gemini. No usernames, browsing history or existing comments are deliberately collected. Generated drafts are cached locally for up to seven days. Nothing is posted automatically.</p>
+<div class="actions"><button type="submit">Save settings</button><button type="button" id="clear" class="secondary">Clear saved drafts</button></div>
+<p id="status" role="status"></p>
+</form><div class="usage" id="usage"></div><p class="hint">Model: Gemini 2.5 Flash-Lite &middot; Text posts on current and old Reddit. Image and video contents are not read. Your preferences can guide tone, but drafts don't know your personal experiences.</p>
+</main><script src="options.js" type="module"></script></body></html>

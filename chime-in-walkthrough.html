@@ -1,0 +1,210 @@
+<div id="chime-walkthrough">
+  <style>
+    #chime-walkthrough{--page:light-dark(#ffffff,#101719);--ink:light-dark(#19242a,#e4ebed);--quiet:light-dark(#52636c,#a5b6be);--line:light-dark(#dce3e6,#35464e);--soft:light-dark(#f2f5f6,#1a282f);--orange:light-dark(#c43d00,#ff9f75);--panel:light-dark(#edf2e5,#222720);--panel-ink:light-dark(#263321,#f4f0e9);--panel-quiet:light-dark(#56644b,#bac1b2);--reply:light-dark(#ffffff,#30372c);--lime:light-dark(#d0e4ad,#c8ec91);font:14px/1.55 system-ui,sans-serif;color:var(--ink);width:100%;color-scheme:light dark}
+    #chime-walkthrough *{box-sizing:border-box}
+    #chime-walkthrough button,#chime-walkthrough select,#chime-walkthrough textarea{font:inherit}
+    #chime-walkthrough button{border:1px solid var(--line);border-radius:9px;background:var(--page);color:var(--ink);padding:8px 12px}
+    #chime-walkthrough button:hover{filter:brightness(.96)}
+    #chime-walkthrough button:disabled{opacity:.55}
+    #chime-walkthrough [hidden]{display:none!important}
+    #chime-walkthrough .demo-top{display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+    #chime-walkthrough .demo-title{display:flex;align-items:center;gap:8px;margin:0;font-size:20px;font-weight:600;letter-spacing:-.5px}
+    #chime-walkthrough .sample-tag{font-size:12px;color:var(--quiet)}
+    #chime-walkthrough .steps{display:flex;flex-wrap:wrap;gap:8px 20px;margin-bottom:16px;color:var(--quiet);font-size:12px}
+    #chime-walkthrough .steps span{display:flex;gap:7px;align-items:center}
+    #chime-walkthrough .steps span.active{color:var(--ink);font-weight:600}
+    #chime-walkthrough .step-number{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--soft)}
+    #chime-walkthrough .active .step-number{background:var(--ink);color:var(--page)}
+    #chime-walkthrough .window{background:var(--page);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+    #chime-walkthrough .addressbar{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--soft);border-bottom:1px solid var(--line);font-size:12px;color:var(--quiet)}
+    #chime-walkthrough .address{flex:1;min-width:0;overflow-wrap:anywhere}
+    #chime-walkthrough .redditbar{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1px solid var(--line)}
+    #chime-walkthrough .reddit-logo{font-size:23px;letter-spacing:-1px;font-weight:700;color:var(--orange)}
+    #chime-walkthrough .content{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:26px;padding:24px;align-items:start}
+    #chime-walkthrough .post-meta{font-size:12px;color:var(--quiet);margin-bottom:12px}
+    #chime-walkthrough .post h2{font-size:24px;font-weight:650;line-height:1.25;letter-spacing:-.6px;margin:0 0 16px}
+    #chime-walkthrough .post p{margin:0 0 16px}
+    #chime-walkthrough .post-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:20px 0}
+    #chime-walkthrough .votes{background:var(--soft);padding:8px 12px;border-radius:20px;font-size:12px}
+    #chime-walkthrough .comment{border-left:2px solid var(--line);padding:0 0 0 14px;margin:22px 0}
+    #chime-walkthrough .comment p{margin:5px 0}
+    #chime-walkthrough .byline{font-size:12px;color:var(--quiet)}
+    #chime-walkthrough .editor-label{display:block;margin:24px 0 8px;font-weight:600}
+    #chime-walkthrough textarea{width:100%;resize:vertical;min-height:115px;padding:12px;background:var(--page);color:var(--ink);border:1px solid var(--line);border-radius:10px}
+    #chime-walkthrough .editor-tools{display:flex;gap:12px;align-items:center;margin-top:9px;flex-wrap:wrap}
+    #chime-walkthrough .editor-note{font-size:12px;color:var(--quiet)}
+    #chime-walkthrough .panel-label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--quiet);margin-bottom:8px}
+    #chime-walkthrough .panel{background:var(--panel);color:var(--panel-ink);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 8px 26px light-dark(#18220d15,#00000030)}
+    #chime-walkthrough .panel-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+    #chime-walkthrough .brand{display:flex;align-items:center;gap:8px;font-size:17px;font-weight:700;letter-spacing:-.25px}
+    #chime-walkthrough .panel button{background:transparent;border:0;color:var(--panel-ink)}
+    #chime-walkthrough .panel .collapse{padding:4px 8px}
+    #chime-walkthrough .mode-line{display:flex;gap:8px;align-items:center;margin-bottom:10px;font-size:12px;color:var(--panel-quiet)}
+    #chime-walkthrough .mode-name{font-weight:600;color:var(--panel-ink)}
+    #chime-walkthrough .suggestion{background:var(--reply);border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px}
+    #chime-walkthrough .suggestion-label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--panel-quiet)}
+    #chime-walkthrough .suggestion p{margin:8px 0 12px}
+    #chime-walkthrough .panel .copy{background:var(--lime);color:#263321;font-size:12px;font-weight:600;padding:7px 10px;border-radius:7px}
+    #chime-walkthrough .panel-footer{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:12px;font-size:11px;color:var(--panel-quiet)}
+    #chime-walkthrough .panel-footer button{font-size:12px;padding:3px 6px}
+    #chime-walkthrough .load-status{color:var(--panel-quiet);margin:12px 0;font-size:12px}
+    #chime-walkthrough .settings label{display:block;font-size:12px;margin:12px 0 6px}
+    #chime-walkthrough .settings select{width:100%;padding:10px;background:var(--reply);color:var(--panel-ink);border:1px solid var(--line);border-radius:9px}
+    #chime-walkthrough .settings p{font-size:12px;color:var(--panel-quiet);min-height:40px;margin:10px 0}
+    #chime-walkthrough .panel .save{background:var(--lime);color:#263321;width:100%;margin-top:4px}
+    #chime-walkthrough .demo-tagline{margin:0 0 18px;color:var(--quiet)}
+    #chime-walkthrough .celebration{color:var(--panel-ink);font-size:12px;margin:8px 0 14px}
+    #chime-walkthrough .caption{margin-top:14px;color:var(--quiet);font-size:12px;min-height:20px}
+    @media(max-width:760px){#chime-walkthrough .content{grid-template-columns:1fr;padding:18px;gap:20px}#chime-walkthrough .post h2{font-size:21px}#chime-walkthrough .redditbar{padding:12px 18px}}
+    @media(pointer:coarse){#chime-walkthrough button,#chime-walkthrough select{min-height:44px}}
+  </style>
+  <div class="demo-top"><h2 class="demo-title"><img src="data:image/png;base64,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" alt="" width="44" height="44">Chime In</h2><span class="sample-tag">Interactive demo &middot; sample replies &middot; no API calls</span></div>
+  <p class="demo-tagline">Less lurking. More chiming in.</p>
+  <div class="steps" aria-label="Reply workflow"><span data-step="read"><b class="step-number">1</b> Open comments</span><span data-step="suggest" class="active"><b class="step-number">2</b> Suggestions appear</span><span data-step="edit"><b class="step-number">3</b> Insert &amp; edit</span></div>
+  <div class="window">
+    <div class="addressbar"><i data-lucide="lock-keyhole" aria-hidden="true"></i><span class="address">reddit.com/r/mildlyinfuriating/comments/demo/apartment_rebrand/</span><span>Chrome</span></div>
+    <div class="redditbar"><span class="reddit-logo">reddit</span><button type="button" class="cursor-interaction" data-action="back">Back to feed</button></div>
+    <div class="content">
+      <section class="post" aria-label="Example Reddit post">
+        <div class="post-meta">r/mildlyinfuriating &middot; sample post</div>
+        <h2>My landlord renamed our building "The Residences at Maple" and raised the rent.</h2>
+        <p>It used to just be Maple Apartments. Same leaky tap. Same laundry room with one working dryer. But now we have a new logo and an extra $150 a month in rent.</p>
+        <p>Apparently the word "Residences" is doing a lot of heavy lifting.</p>
+        <div class="post-actions"><span class="votes">482 upvotes</span><button type="button" class="cursor-interaction" data-action="comments">Comments open</button></div>
+        <div data-section="comments">
+          <div class="comment"><span class="byline">u/dryer_survivor &middot; sample comment</span><p>The one working dryer is now a curated laundry experience.</p></div>
+          <div class="comment"><span class="byline">u/maple_leaf &middot; sample comment</span><p>Did they at least fix the tap before unveiling the logo?</p></div>
+          <label class="editor-label" for="chime-demo-editor">Your reply</label>
+          <textarea id="chime-demo-editor" placeholder="What would you like to add?" aria-describedby="chime-demo-editor-note"></textarea>
+          <div class="editor-tools"><span class="editor-note" id="chime-demo-editor-note">Demo only. Nothing is posted.</span></div>
+        </div>
+      </section>
+      <aside data-section="aside" aria-label="Chime In extension">
+        <div class="panel-label">Extension panel</div>
+        <div class="panel">
+          <div class="panel-header"><span class="brand"><img src="data:image/png;base64,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" alt="" width="32" height="32">Chime In</span><button type="button" class="collapse cursor-interaction" data-action="collapse" aria-expanded="true">Collapse</button></div>
+          <div data-section="panelbody">
+            <div data-section="replies"><div class="mode-line"><span class="mode-name" data-value="mode">Boring</span><span>&middot; 3 reply ideas</span></div><p class="celebration" data-value="celebration" hidden>Look at you, joining the conversation. The lurker council will miss you. Make it yours, then hit Comment.</p><div data-section="cards"></div></div>
+            <p class="load-status" data-section="loading" hidden>Finding a way into the conversation...</p>
+            <div class="settings" data-section="settings" hidden>
+              <label for="chime-demo-mode">Reply personality</label>
+              <select id="chime-demo-mode" class="cursor-interaction"><option value="boring">Boring</option><option value="troll">Troll</option><option value="mom">Mom</option><option value="byzantine">Byzantine uncle</option></select>
+              <p data-value="description"></p>
+              <button type="button" class="save cursor-interaction" data-action="save">Save personality</button>
+            </div>
+            <div class="panel-footer"><span>A little help. All you.</span><button type="button" class="cursor-interaction" data-action="settings">Settings</button></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+  <div class="caption" role="status" aria-live="polite" data-value="caption">Opening a comment thread brings up suggestions automatically.</div>
+</div>
+<script>
+(() => {
+  const root = document.getElementById('chime-walkthrough');
+  const find = selector => root.querySelector(selector);
+  const samples = {
+    boring: { name: 'Boring', description: 'Ordinary, relevant replies. Perfectly serviceable.', labels: ['Ask a question','Add an observation','Another angle'], replies: [
+      'Did they give any reason for the increase beyond the rebrand?',
+      'A new name seems like a pretty small upgrade when the basic maintenance still needs work.',
+      'I wonder how much that logo would have cost in functioning dryers.'
+    ]},
+    troll: { name: 'Troll', description: 'Playful provocation. Poke the premise and stir the pot.', labels: ['Poke the premise','Contrarian take','Stir the pot'], replies: [
+      'You are paying for the privilege of residing. Apartment-dwellers would not understand.',
+      'Have you tried calling the broken dryer a boutique moisture retention system?',
+      'Does the extra $150 cover the new syllables, or is typography billed separately?'
+    ]},
+    mom: { name: 'Mom', description: 'Warm, reassuring, and very proud of you.', labels: ['A little reassurance',"You've got this",'Checking in'], replies: [
+      'That sounds frustrating, especially when the everyday things you need still do not work. You are not unreasonable for expecting actual repairs.',
+      'You deserve a place where the basics work, whatever they put on the sign.',
+      'Have any of your neighbors raised the same concerns? It might feel less daunting to ask about the repairs together.'
+    ]},
+    byzantine: { name: 'Byzantine uncle', description: 'Every topic somehow comes back to the Byzantine Empire.', labels: ['Somehow, Byzantium','An imperial detour','Uncle has another fact'], replies: [
+      'Constantine renamed Byzantium after himself and also got to call it New Rome. Your landlord has somehow attempted the same maneuver with one dryer.',
+      'Constantinople returned to Byzantine imperial rule in 1261. Perhaps Maple Apartments can also be restored to its former glory: two working dryers.',
+      'The Byzantine elite used Roman law to keep a highly organized government running. Maple management appears to be trying the same thing with a logo.'
+    ]}
+  };
+  const state = { mode: 'boring', comments: true, collapsed: false, settings: false, inserted: '', draft: '', loading: false };
+  let timer;
+  function restore(saved) {
+    const m = saved?.modelContent?.personality;
+    const p = saved?.privateContent;
+    if (Object.hasOwn(samples, m)) state.mode = m;
+    if (p && typeof p === 'object') {
+      if (typeof p.comments === 'boolean') state.comments = p.comments;
+      if (typeof p.collapsed === 'boolean') state.collapsed = p.collapsed;
+      if (typeof p.draft === 'string') state.draft = p.draft.slice(0,3000);
+      if (typeof p.inserted === 'string') state.inserted = p.inserted.slice(0,1000);
+    }
+    state.loading = false; state.settings = false;
+    clearTimeout(timer);
+    render();
+  }
+  function remember() {
+    const api = window.openai;
+    if (api?.setWidgetState) api.setWidgetState({ modelContent: { personality: state.mode }, privateContent: { comments: state.comments, collapsed: state.collapsed, inserted: state.inserted, draft: state.draft } }).catch(() => {});
+  }
+  function caption(text) { find('[data-value="caption"]').textContent = text; }
+  function render() {
+    const sample = samples[state.mode];
+    find('[data-section="comments"]').hidden = !state.comments;
+    find('[data-section="aside"]').hidden = !state.comments;
+    find('[data-section="panelbody"]').hidden = state.collapsed;
+    find('[data-section="replies"]').hidden = state.settings || state.loading;
+    find('[data-section="settings"]').hidden = !state.settings;
+    find('[data-section="loading"]').hidden = !state.loading;
+    find('[data-action="collapse"]').textContent = state.collapsed ? 'Expand' : 'Collapse';
+    find('[data-action="collapse"]').setAttribute('aria-expanded', String(!state.collapsed));
+    find('[data-action="comments"]').textContent = state.comments ? 'Comments open' : 'Open comments';
+    find('[data-action="back"]').disabled = !state.comments;
+    find('[data-action="settings"]').textContent = state.settings ? 'Back to replies' : 'Settings';
+    find('[data-value="mode"]').textContent = sample.name;
+    find('#chime-demo-mode').value = state.mode;
+    find('[data-value="description"]').textContent = sample.description;
+    find('#chime-demo-editor').value = state.draft;
+    find('[data-value="celebration"]').hidden = !state.inserted;
+    const cards = find('[data-section="cards"]');
+    cards.replaceChildren();
+    sample.replies.forEach((reply, i) => {
+      const card = document.createElement('article'); card.className = 'suggestion';
+      const label = document.createElement('span'); label.className = 'suggestion-label'; label.textContent = sample.labels[i];
+      const p = document.createElement('p'); p.textContent = reply;
+      const useReply = document.createElement('button'); useReply.type = 'button'; useReply.className = 'copy cursor-interaction'; useReply.textContent = 'Insert';
+      useReply.addEventListener('click', () => {
+        if (state.draft.trim() && state.draft !== state.inserted) {
+          caption('Your comment box has a draft. Clear it first to use a suggestion.');
+          find('#chime-demo-editor').focus(); return;
+        }
+        state.draft = reply; state.inserted = reply; render(); remember();
+        find('#chime-demo-editor').focus();
+        caption('Reply inserted. You can edit it before posting.');
+      });
+      card.append(label,p,useReply); cards.append(card);
+    });
+    const active = !state.comments ? 'read' : state.draft ? 'edit' : 'suggest';
+    root.querySelectorAll('[data-step]').forEach(el => el.classList.toggle('active',el.dataset.step === active));
+  }
+  function generate() {
+    clearTimeout(timer); state.loading = true; render();
+    caption('In the extension, Gemini generates three replies using the post and your chosen personality.');
+    timer = setTimeout(() => { state.loading = false; render(); caption('Suggestions appear automatically. Sample replies shown here.'); }, 650);
+  }
+  find('[data-action="comments"]').addEventListener('click', () => {
+    if (state.comments) return;
+    state.comments = true; state.settings = false; state.collapsed = false; generate(); remember();
+  });
+  find('[data-action="back"]').addEventListener('click', () => {
+    clearTimeout(timer); state.comments = false; state.loading = false; state.settings = false; render(); remember();
+    caption('Browsing the feed: no suggestions yet. Open comments to trigger them.');
+  });
+  find('[data-action="collapse"]').addEventListener('click', () => { state.collapsed = !state.collapsed; render(); remember(); });
+  find('[data-action="settings"]').addEventListener('click', () => { state.settings = !state.settings; render(); });
+  find('#chime-demo-mode').addEventListener('change', event => { find('[data-value="description"]').textContent = samples[event.target.value].description; });
+  find('[data-action="save"]').addEventListener('click', () => { state.mode = find('#chime-demo-mode').value; state.settings = false; generate(); remember(); });
+  find('#chime-demo-editor').addEventListener('input', event => { state.draft = event.target.value; remember(); root.querySelectorAll('[data-step]').forEach(el => el.classList.toggle('active',el.dataset.step === (state.draft ? 'edit' : 'suggest'))); });
+  window.addEventListener('openai:set_globals', event => { if (event.detail?.globals?.widgetState) restore(event.detail.globals.widgetState); });
+  restore(window.openai?.widgetState);
+})();
+</script>
