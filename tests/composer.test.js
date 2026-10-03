@@ -1,4 +1,4 @@
-﻿import test from "node:test";
+import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import vm from "node:vm";
@@ -50,4 +50,3 @@ test("does not write after navigation, and handles an unavailable composer", asy
   await assert.rejects(api.fillReply("A reply", () => false), /thread changed/);
   await assert.rejects(api.fillReply("A reply"), /main comment box/);
 });
-

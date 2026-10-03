@@ -76,4 +76,3 @@
   }
   globalThis.ChimeInComposer = { fillReply, writeReply, findEditor };
 })();
-
